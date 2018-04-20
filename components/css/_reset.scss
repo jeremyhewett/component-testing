@@ -1,0 +1,74 @@
+// CAUTION
+// Importing this file can break your current layout if you are
+// using bootstrap at the same moment.
+
+// Must be 100% for off canvas to work
+html,
+body {
+  height: 100%;
+}
+
+// Set box-sizing globally to handle padding and border widths
+*,
+*:before,
+*:after {
+  @include box-sizing(border-box);
+}
+
+html,
+body {
+  font-size: $base-font-size;
+}
+
+// Default body styles
+body {
+  background: $body-bg;
+  color: $body-font-color;
+  cursor: $cursor-auto-value;
+  font-family: $body-font-family;
+  font-style: $body-font-style;
+  font-weight: $body-font-weight;
+  line-height: $base-line-height; // Set to $base-line-height to take on browser default of 150%
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+a:hover {
+  cursor: $cursor-pointer-value;
+}
+
+// Grid Defaults to get images and embeds to work properly
+// Get rid of gap under images by making them display: inline-block; by default
+img {
+  display: inline-block;
+  height: auto;
+  -ms-interpolation-mode: bicubic;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+#map_canvas,
+.map_canvas,
+.mqa-display {
+  img,
+  embed,
+  object {
+    max-width: none !important;
+  }
+}
+
+//
+// Global resets for forms
+//
+
+// Make sure textarea takes on height automatically
+textarea {
+  height: auto;
+  min-height: 50px;
+}
+
+// Make select elements 100% width by default
+select {
+  width: 100%;
+}

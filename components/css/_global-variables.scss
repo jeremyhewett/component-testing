@@ -1,0 +1,82 @@
+$medium-range: (40.063em, 64em);
+$screen: "only screen";
+$medium-up: "#{$screen} and (min-width:#{lower-bound($medium-range)})";
+
+$body-font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+
+$global-radius: 3px;
+
+$cursor-default-value: default;
+
+$base-font-size: 16px;
+$rem-base: $base-font-size;
+
+//
+// ACL variables
+//
+$font-scale-ratio: 1.125 !default; // 8:9 - Major second
+$contrasted-dark-default:   #000 !default;
+$contrasted-light-default:  #fff !default;
+$contrasted-lightness-threshold: 30% !default;
+
+//
+// Override the following variables before importing acl-ui
+//
+
+// If the above is false then $font-path can also be customizable
+$font-path: 'assets/fonts' !default;
+
+// Do not use normalize by default
+$normalize: false !default;
+
+//
+// Alert config:
+//
+// $alert-border-width: 0;
+// $alert-close-color: $black;
+// $alert-close-top: 1.125rem;
+// $alert-close-opacity: .65;
+// $alert-close-opacity-hover: 1;
+// $alert-close-padding: .25rem .5rem;
+
+//
+// Dropdown Buttons
+//
+// $dropdown-button-pip-color: $black;
+ $button-pip-sml: rem-calc(5);
+ $button-pip-med: rem-calc(8);
+// $dropdown-button-pip-size-sml: $button-pip-sml;
+// $dropdown-button-padding-med: $button-pip-med * 5 + rem-calc(1);
+
+//
+// Pagination
+//
+// $pagination-link-font-color: $link-color;
+// $pagination-link-active-bg: scale-color(#fff, $lightness: -5%);
+// $pagination-link-unavailable-font-color: $black-lighten-30;
+// $pagination-link-current-background: $green;
+// $pagination-link-current-active-bg: $green;
+
+//
+// Reveal
+//
+// $reveal-overlay-bg: rgba(#000, .4);
+// $reveal-overlay-bg-old: $black;
+// $reveal-default-width: 50%;
+// $reveal-box-shadow: 0 0 7px rgba($black,.30);
+// $reveal-modal-class: "reveal-modal";
+
+//
+// Topbar
+//
+// $topbar-bg-color: $white;
+// $topbar-bg: $primary-color;
+// $topbar-height: rem-calc(45);
+// $topbar-dropdown-bg: transparent;
+// $topbar-dropdown-link-color: $link-color;
+// $topbar-dropdown-link-bg: #FFF;
+// $topbar-dropdown-toggle-alpha: 0.3;
+// $topbar-link-color: $link-color;
+// $topbar-link-color-hover: $link-color;
+// $topbar-link-font-size: rem-calc(14);
+// $topbar-link-bg-hover: $black-lighten-70;

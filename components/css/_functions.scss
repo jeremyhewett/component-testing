@@ -1,0 +1,249 @@
+// Foundation by ZURB
+// foundation.zurb.com
+// Licensed under MIT Open Source
+
+// This is the default html and body font-size for the base rem value.
+$rem-base: 16px !default;
+
+// IMPORT ONCE
+// We use this to prevent styles from being loaded multiple times for components that rely on other components.
+$modules: () !default;
+
+@mixin exports($name) {
+  // Import from global scope
+  $modules: $modules !global;
+  // Check if a module is already on the list
+  $module_index: index($modules, $name);
+  @if (($module_index == null) or ($module_index == false)) {
+    $modules: append($modules, $name) !global;
+    @content;
+  }
+}
+
+//
+// @functions
+//
+
+
+// RANGES
+// We use these functions to define ranges for various things, like media queries.
+@function lower-bound($range) {
+  @if length($range) <= 0 {
+    @return 0;
+  }
+  @return nth($range, 1);
+}
+
+@function upper-bound($range) {
+  @if length($range) < 2 {
+    @return 999999999999;
+  }
+  @return nth($range, 2);
+}
+
+// STRIP UNIT
+// It strips the unit of measure and returns it
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+// TEXT INPUT TYPES
+
+@function text-inputs( $types: all, $selector: input ) {
+
+  $return: ();
+
+  $all-text-input-types:
+    text
+    password
+    date
+    datetime
+    datetime-local
+    month
+    week
+    email
+    number
+    search
+    tel
+    time
+    url
+    color
+    textarea;
+
+  @if $types == all { $types: $all-text-input-types; }
+
+  @each $type in $types {
+    @if $type == textarea {
+      @if $selector == input {
+        $return: append($return, unquote('#{$type}'), comma)
+      } @else {
+        $return: append($return, unquote('#{$type}#{$selector}'), comma)
+      }
+    } @else {
+      $return: append($return, unquote('#{$selector}[type="#{$type}"]'), comma)
+    }
+  }
+
+    @return $return;
+
+}
+
+// CONVERT TO REM
+@function convert-to-rem($value, $base-value: $rem-base) {
+  $value: strip-unit($value) / strip-unit($base-value) * 1rem;
+  @if ($value == 0rem) { $value: 0; } // Turn 0rem into 0
+  @return $value;
+}
+
+@function data($attr) {
+  @if $namespace {
+    @return '[data-' + $namespace + '-' + $attr + ']';
+  }
+
+  @return '[data-' + $attr + ']';
+}
+
+// REM CALC
+
+// New Syntax, allows to optionally calculate on a different base value to counter compounding effect of rem's.
+// Call with 1, 2, 3 or 4 parameters, 'px' is not required but supported:
+//
+//   rem-calc(10 20 30px 40);
+//
+// Space delimited, if you want to delimit using comma's, wrap it in another pair of brackets
+//
+//   rem-calc((10, 20, 30, 40px));
+//
+// Optionally call with a different base (eg: 8px) to calculate rem.
+//
+//   rem-calc(16px 32px 48px, 8px);
+//
+// If you require to comma separate your list
+//
+//   rem-calc((16px, 32px, 48), 8px);
+
+@function rem-calc($values, $base-value: $rem-base) {
+  $max: length($values);
+
+  @if $max == 1 { @return convert-to-rem(nth($values, 1), $base-value); }
+
+  $remValues: ();
+  @for $i from 1 through $max {
+    $remValues: append($remValues, convert-to-rem(nth($values, $i), $base-value));
+  }
+  @return $remValues;
+}
+
+
+@function em-calc($values, $base-value: $rem-base) {
+  $remValues: rem-calc($values, $base-value: $rem-base);
+
+  $max: length($remValues);
+
+  @if $max == 1 { @return strip-unit(nth($remValues, 1)) * 1em; }
+
+  $emValues: ();
+  @for $i from 1 through $max {
+    $emValues: append($emValues, strip-unit(nth($remValues, $i)) * 1em);
+  }
+  @return $emValues;
+}
+
+
+// Deprecated: OLD EM CALC
+@function emCalc($values) {
+  @return em-calc($values);
+}
+
+@function pow($Base, $Exponent) {
+
+  // Find and remove unit.
+  // Avoids messiness with unit calculations
+  $Unit: $Base * 0 + 1;
+  $Base: $Base/$Unit;
+
+  // This function doesnt support non-interger exponents.
+  // Warn the user about why this is breaking.
+  @if round($Exponent) != $Exponent {
+    @warn "Unfortunately, you can't use non-integer exponents.";
+  }
+
+  // Set up the loop, priming the return with the base.
+  $Return: $Base;
+
+  // If the number is positive, multiply it.
+  @if $Exponent > 0 {
+    // Basic feedback loop as exponents
+    // are recursively multiplied numbers.
+    @for $i from 1 to $Exponent {
+      $Return: $Return * $Base;
+    }
+  }
+
+  // If the number is 0 or negative
+  // divide instead of multiply.
+  @else {
+    // Libsass doesnt allow negative values in loops
+    @for $i from (-1 + 1) to (abs($Exponent) + 1) {
+      $Return: $Return / $Base;
+    }
+  }
+
+  // Return is now compounded ready to be returned.
+  // Add the unit back onto the number.
+  @return $Return * $Unit;
+}
+
+
+//  -------------------------------------------------
+// Font scale function to return a number
+// on a modular scale based on input
+//  -------------------------------------------------
+@function font-scale($scale: 0) {
+  @return round($rem-base * pow($font-scale-ratio, $scale));
+}
+
+
+//  -------------------------------------------------
+// Returns the `$light` color when the `$color` is dark
+// and the `$dark` color when the `$color` is light.
+// The `$threshold` is a percent between `0%` and `100%` and it determines
+// when the lightness of `$color` changes from "dark" to "light".
+//  -------------------------------------------------
+@function contrast-color(
+  $color,
+  $dark: $contrasted-dark-default,
+  $light: $contrasted-light-default,
+  $threshold: $contrasted-lightness-threshold
+) {
+  @return if(lightness($color) < $threshold, $light, $dark)
+}
+
+
+//  -------------------------------------------------
+// Create a z-index standard
+// Use it like this: `z-index: z(1);`
+//  -------------------------------------------------
+@function z($layerName) {
+  $map: (
+    auto: auto,
+    initial: initial,
+    inherit: inherit,
+    -1: -1,
+    0: 0,
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 5,
+    6: 6,
+    7: 7
+  );
+
+  @if map-has-key($map, $layerName) {
+    @return map-get($map, $layerName);
+  }
+
+  @warn 'There is no item "#{$layerName}" in this list; choose one of: #{$map}';
+  @return 1;
+}

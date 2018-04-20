@@ -1,0 +1,197 @@
+@import
+'../css/functions',
+'../css/mixins',
+'../css/_colors',
+'../css/_global-variables';
+$transition-values: all .550s ease;
+.aclui-sidepanel {
+  .acl-panel-overlay {
+    background: rgba($color--creme-darken-30, .7);
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+  }
+
+  .acl-panel {
+    background: white;
+    bottom: 0;
+    box-sizing: border-box;
+    margin-right: -100%;
+    opacity: 0;
+    position: fixed;
+    top: 0;
+    transition: $transition-values;
+    visibility: hidden;
+    width: 620px;
+    z-index: 100000;
+
+    &.is-open {
+      margin-right: 0;
+      opacity: 1;
+      transition: $transition-values;
+      visibility: visible;
+      z-index: 100000;
+
+      .panel__close {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      ~ .acl-panel-overlay {
+        opacity: 1;
+        transition: $transition-values;
+        visibility: visible;
+        z-index: 99999;
+      }
+
+      .panel__content {
+        opacity: 1;
+        transition: $transition-values;
+        visibility: visible;
+      }
+
+      .panel__body {
+        transition: $transition-values;
+        visibility: visible;
+      }
+
+      .panel__header {
+        visibility: visible;
+      }
+      .panel__title {
+        visibility: visible;
+      }
+    }
+    .row {
+      padding: 0;
+      > .row {
+        padding: 0;
+      }
+    }
+
+    &.acl-panel--size-small {
+      width: 620px;
+    }
+
+    &.acl-panel--size-one-third {
+      width: 33%;
+    }
+
+    &.acl-panel--size-half {
+      width: 50%;
+    }
+
+    &.acl-panel--size-three-quarters {
+      width: 75%;
+    }
+
+    &.acl-panel--size-max {
+      width: 95%;
+    }
+  }
+
+  .acl-panel--slide-right {
+    box-shadow: -1px -1px 2px rgba($color--black, .3);
+    right: 0;
+  }
+
+  .acl-panel--slide-left {
+    box-shadow: 1px -1px 2px rgba($color--black, .3);
+    left: 0;
+  }
+
+  .panel__close {
+    background: none;
+    border: 0;   //Needed to override acl-ui 2
+    box-shadow: none;
+    font-size: font-scale(-1);
+    opacity: 0;
+    position: absolute;
+    right: 8px;
+    top: 14px;
+    visibility: hidden;
+    @media #{$medium-up} {
+      top: 20px;
+    }
+    .close__icon {
+      color: rgba(white, .5);
+    }
+    &:hover,
+    &:focus,
+    &:active {
+      background: none;
+      border-color: white;
+      box-shadow: none;
+      .close__icon {
+        color: white;
+      }
+    }
+
+    &:focus {
+      outline: 1px dotted;
+    }
+  }
+
+  .panel__body {
+    height: 100%;
+    visibility: hidden;
+  }
+
+  .panel__header {
+    background-color: $color--purple;
+    color: white;
+    padding: 1rem 1.5rem;
+    position: relative;
+    visibility: hidden;
+  }
+
+  .panel__title {
+    color: white;
+    font-weight: 300;
+    margin-bottom: 0;
+    visibility: hidden;
+    width: calc(100% - 32px);
+  }
+
+  .panel-title__icon {
+    margin-right: rem-calc(10px);
+  }
+
+  .panel__content {
+    height: 88%;
+    opacity: 0;
+    overflow-y: auto;
+    padding: 1rem 1.5rem;
+    visibility: hidden;
+  }
+
+  .acl-panel--secondary {
+    .panel__header {
+      background-color: $color--creme;
+    }
+
+    .panel__title {
+      color: $color--black;
+    }
+
+    .panel__close {
+      .close__icon {
+        color: rgba($color--black, .6);
+      }
+      &:hover,
+      &:focus,
+      &:active {
+        border-color: $color--black;
+        .close__icon {
+          color: $color--black;
+        }
+      }
+    }
+  }
+}
